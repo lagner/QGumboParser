@@ -1,0 +1,12 @@
+doc/html
+*.swp
+*~
+*.user
+*.user.*
+*.o
+*.moc
+moc_*.cpp
+*.so
+*.so.*
+*.dll
+*.exe

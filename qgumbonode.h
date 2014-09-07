@@ -1,0 +1,56 @@
+#ifndef QGUMBONODE_H
+#define QGUMBONODE_H
+
+#include <vector>
+#include <functional>
+#include "gumbo-parser/src/gumbo.h"
+#include "HtmlTag.h"
+
+class QString;
+class QGumboNode;
+class QGumboAttribute;
+class QGumboDocument;
+class QStringList;
+
+typedef std::vector<QGumboNode> 		QGumboNodes;
+typedef std::vector<QGumboAttribute> 	QGumboAttributes;
+
+class QGumboNode
+{
+public:
+    QGumboNode(QGumboNode&&) noexcept;
+
+    QString tagName() const;
+    QString id() const;
+    QStringList classList() const;
+
+    QGumboNodes getElementById(const QString&) const;
+    QGumboNodes getElementsByTagName(HtmlTag) const;
+
+    QGumboNodes getElementsByClassName(const QString&) const;
+
+    bool isElement() const;
+    bool hasAttribute(const QString&) const;
+
+    QString innerText() const;
+    QString getAttribute(const QString&) const;
+
+    QGumboAttributes allAttributes() const;
+
+    void forEach(std::function<void(const QGumboNode&)>) const;
+
+private:
+    QGumboNode();
+    QGumboNode(GumboNode* node);
+
+    QGumboNode(const QGumboNode&) = delete;
+    QGumboNode& operator=(const QGumboNode&) = delete;
+
+    GumboNode* findId(const char* id, GumboNode* node) const;
+
+    friend class QGumboDocument;
+private:
+    GumboNode* ptr_;
+};
+
+#endif // QGUMBONODE_H

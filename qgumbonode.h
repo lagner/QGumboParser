@@ -18,7 +18,7 @@ typedef std::vector<QGumboAttribute> 	QGumboAttributes;
 class QGumboNode
 {
 public:
-    QGumboNode(QGumboNode&&) noexcept;
+    QGumboNode(QGumboNode&&) noexcept = default;
 
     QString tagName() const;
     QString id() const;

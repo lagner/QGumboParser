@@ -9,6 +9,7 @@ QT       -= gui
 TARGET = QGumboParser
 TEMPLATE = lib
 CONFIG += staticlib c++11
+QMAKE_CFLAGS += -std=c99
 
 SOURCES += \
     qgumboattribute.cpp \

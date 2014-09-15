@@ -18,7 +18,9 @@ typedef std::vector<QGumboAttribute> 	QGumboAttributes;
 class QGumboNode
 {
 public:
+    QGumboNode(const QGumboNode&) = default;
     QGumboNode(QGumboNode&&) noexcept = default;
+    QGumboNode& operator=(const QGumboNode&) = default;
 
     QString tagName() const;
     QString id() const;
@@ -43,8 +45,6 @@ private:
     QGumboNode();
     QGumboNode(GumboNode* node);
 
-    QGumboNode(const QGumboNode&) = delete;
-    QGumboNode& operator=(const QGumboNode&) = delete;
 
     GumboNode* findId(const char* id, GumboNode* node) const;
 

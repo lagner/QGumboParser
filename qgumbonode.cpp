@@ -169,7 +169,7 @@ bool QGumboNode::hasAttribute(const QString& name) const
 
 QString QGumboNode::getAttribute(const QString& attrName) const
 {
-    if (!attrName.isEmpty())
+    if (attrName.isEmpty())
         throw std::invalid_argument("attribute name can't be empty string");
 
     GumboAttribute* attr = gumbo_get_attribute(&ptr_->v.element.attributes,

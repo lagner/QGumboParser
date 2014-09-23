@@ -48,7 +48,7 @@ HEADERS += \
     HtmlTag.h
 
 contains(QMAKE_CC, gcc): {
-    QMAKE_CFLAGS_WARN_ON += -Wno-unused-parameter -Wno-sign-compare
+    QMAKE_CFLAGS_WARN_ON += -Wno-unused-parameter -Wno-sign-compare -Wno-old-style-declaration
 }
 
 unix {

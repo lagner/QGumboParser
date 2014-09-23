@@ -47,6 +47,10 @@ HEADERS += \
     gumbo-parser/src/vector.h \
     HtmlTag.h
 
+contains(QMAKE_CC, gcc): {
+    QMAKE_CFLAGS_WARN_ON += -Wno-unused-parameter -Wno-sign-compare
+}
+
 unix {
     target.path = /usr/lib
     INSTALLS += target

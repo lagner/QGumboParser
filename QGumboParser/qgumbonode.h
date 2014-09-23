@@ -41,6 +41,8 @@ public:
 
     void forEach(std::function<void(const QGumboNode&)>) const;
 
+    explicit operator bool() const;
+
 private:
     QGumboNode();
     QGumboNode(GumboNode* node);

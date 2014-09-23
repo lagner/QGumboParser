@@ -1,3 +1,4 @@
+#include <cstring>
 #include <QString>
 #include <QDebug>
 #include <QStringList>
@@ -5,6 +6,9 @@
 #include "qgumboattribute.h"
 
 namespace {
+
+const char* const ID_ATTRIBUTE 		= u8"id";
+const char* const CLASS_ATTRIBUTE 	= u8"class";
 
 template<typename TFunctor>
 bool iterateTree(GumboNode* node, TFunctor& functor) {
@@ -42,9 +46,12 @@ QGumboNodes QGumboNode::getElementById(const QString& nodeId) const
     if (nodeId.isEmpty())
         throw std::invalid_argument("id can't be empty string");
 
+    QByteArray buff = nodeId.toUtf8();
+    const char* nodeIdValue = buff.constData();
+
     QGumboNodes nodes;
 
-    GumboNode *founded = findId(nodeId.toUtf8().constData(), ptr_);
+    GumboNode *founded = findId(nodeIdValue, ptr_);
     if (founded) {
         nodes.emplace_back(QGumboNode(founded));
     }
@@ -211,9 +218,9 @@ GumboNode* QGumboNode::findId(const char* id, GumboNode* node) const
     if (!id || !node || node->type != GUMBO_NODE_ELEMENT)
         return nullptr;
 
-    GumboAttribute* attr = gumbo_get_attribute(&node->v.element.attributes, u8"id");
+    GumboAttribute* attr = gumbo_get_attribute(&node->v.element.attributes, ID_ATTRIBUTE);
     if (attr) {
-        if (!strcmp(attr->value, id)) {
+        if (strncmp(attr->value, id, strlen(ID_ATTRIBUTE)) == 0) {
             return node;
         } else {
             for (uint i = 0; i < node->v.element.children.length; ++i) {
@@ -224,4 +231,8 @@ GumboNode* QGumboNode::findId(const char* id, GumboNode* node) const
         }
     }
     return nullptr;
+}
+
+QGumboNode::operator bool() const {
+    return ptr_;
 }

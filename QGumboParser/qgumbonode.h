@@ -9,7 +9,7 @@
 class QString;
 class QGumboNode;
 class QGumboAttribute;
-class tst_QGumboDocument;
+class QGumboDocument;
 class QStringList;
 
 typedef std::vector<QGumboNode> 		QGumboNodes;
@@ -45,10 +45,9 @@ private:
     QGumboNode();
     QGumboNode(GumboNode* node);
 
-
     GumboNode* findId(const char* id, GumboNode* node) const;
 
-    friend class tst_QGumboDocument;
+    friend class QGumboDocument;
 private:
     GumboNode* ptr_;
 };

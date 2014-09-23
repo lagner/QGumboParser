@@ -7,4 +7,4 @@
 TEMPLATE = subdirs
 CONFIG += ordered
 
-SUBDIRS += QGumboParser tests
+SUBDIRS += QGumboParser

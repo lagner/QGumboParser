@@ -51,6 +51,7 @@ void tst_qgumboparsertest::getById()
         QVERIFY(nodes.size() == 1);
 
         QGumboNode& node = nodes.front();
+        QVERIFY(!!node);
 
         QString value = node.innerText();
         QCOMPARE(value, QStringLiteral("Some text for testing"));
@@ -92,26 +93,35 @@ void tst_qgumboparsertest::getAttributes() {
         QGumboNode root = validDocument->rootNode();
         QVERIFY(!!root);
 
-        QGumboNodes nodes = root.getElementsByTagName(HtmlTag::A);
-        QCOMPARE(nodes.size(), size_t(1));
+        {
+            QGumboNodes nodes = root.getElementsByTagName(HtmlTag::A);
+            QCOMPARE(nodes.size(), size_t(1));
 
-        QGumboNode& node = nodes.front();
+            QGumboNode& node = nodes.front();
+            QVERIFY(!!node);
 
-        QGumboAttributes attrs = node.allAttributes();
-        QCOMPARE(attrs.size(), size_t(1));
+            QGumboAttributes attrs = node.allAttributes();
+            QCOMPARE(attrs.size(), size_t(1));
 
-        QGumboAttribute& attr = attrs.front();
-        QCOMPARE(attr.name(), QStringLiteral("href"));
-        QCOMPARE(attr.value(), QStringLiteral("http://example.com"));
+            QGumboAttribute& attr = attrs.front();
+            QCOMPARE(attr.name(), QStringLiteral("href"));
+            QCOMPARE(attr.value(), QStringLiteral("http://example.com"));
+        }
+        {
+            QGumboNodes nodes = root.getElementsByTagName(HtmlTag::P);
+            QCOMPARE(nodes.size(), size_t(1));
 
-        nodes = root.getElementsByTagName(HtmlTag::P);
-        QCOMPARE(nodes.size(), size_t(1));
+            QGumboNode node = nodes.front();
+            QVERIFY(!!node);
 
-        node 	= nodes.front();
-        attrs 	= node.allAttributes();
-        attr 	= attrs.front();
-        QCOMPARE(attr.name(), QStringLiteral("id"));
-        QCOMPARE(attr.value(), QStringLiteral("target"));
+            QGumboAttributes attrs = node.allAttributes();
+            QCOMPARE(attrs.size(), size_t(1));
+
+            QGumboAttribute& attr = attrs.front();
+
+            QCOMPARE(attr.name(), QStringLiteral("id"));
+            QCOMPARE(attr.value(), QStringLiteral("target"));
+        }
 
     } catch (const std::exception& ex) {
         QString mes("exception was thrown: ");

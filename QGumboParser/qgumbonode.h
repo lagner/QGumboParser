@@ -47,8 +47,6 @@ private:
     QGumboNode();
     QGumboNode(GumboNode* node);
 
-    GumboNode* findId(const char* id, GumboNode* node) const;
-
     friend class QGumboDocument;
 private:
     GumboNode* ptr_;

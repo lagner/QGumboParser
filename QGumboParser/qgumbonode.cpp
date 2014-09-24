@@ -46,15 +46,21 @@ QGumboNodes QGumboNode::getElementById(const QString& nodeId) const
     if (nodeId.isEmpty())
         throw std::invalid_argument("id can't be empty string");
 
-    QByteArray buff = nodeId.toUtf8();
-    const char* nodeIdValue = buff.constData();
-
+    const QByteArray idName = nodeId.toUtf8();
     QGumboNodes nodes;
 
-    GumboNode *founded = findId(nodeIdValue, ptr_);
-    if (founded) {
-        nodes.emplace_back(QGumboNode(founded));
-    }
+    auto functor = [&nodes, &idName] (GumboNode* node) {
+        GumboAttribute* attr = gumbo_get_attribute(&node->v.element.attributes, ID_ATTRIBUTE);
+        if (attr) {
+            if (strcmp(attr->value, idName.constData()) == 0) {
+                nodes.emplace_back(QGumboNode(node));
+                return true;
+            }
+        }
+        return false;
+    };
+
+    iterateTree(ptr_, functor);
 
     return nodes;
 }
@@ -88,7 +94,7 @@ QGumboNodes QGumboNode::getElementsByClassName(const QString& name) const
     QGumboNodes nodes;
 
     auto functor = [&nodes, &className] (GumboNode* node) {
-        GumboAttribute* attr = gumbo_get_attribute(&node->v.element.attributes, u8"class");
+        GumboAttribute* attr = gumbo_get_attribute(&node->v.element.attributes, CLASS_ATTRIBUTE);
         if (attr) {
             if (strstr(attr->value, className.constData()) != nullptr) {
                 nodes.emplace_back(QGumboNode(node));
@@ -192,7 +198,8 @@ QGumboAttributes QGumboNode::allAttributes() const
     Q_ASSERT(ptr_);
 
     QGumboAttributes attrs;
-    for (uint i = 0; i < ptr_->v.element.attributes.length; ++i) {
+
+    for (uint i = 0, len = ptr_->v.element.attributes.length; i < len; ++i) {
         GumboAttribute* attr =
                 static_cast<GumboAttribute*>(ptr_->v.element.attributes.data[i]);
         attrs.emplace_back(QGumboAttribute(attr->name, attr->value));
@@ -211,26 +218,6 @@ void QGumboNode::forEach(std::function<void(const QGumboNode&)> func) const
     };
 
     iterateTree(ptr_, functor);
-}
-
-GumboNode* QGumboNode::findId(const char* id, GumboNode* node) const
-{
-    if (!id || !node || node->type != GUMBO_NODE_ELEMENT)
-        return nullptr;
-
-    GumboAttribute* attr = gumbo_get_attribute(&node->v.element.attributes, ID_ATTRIBUTE);
-    if (attr) {
-        if (strncmp(attr->value, id, strlen(ID_ATTRIBUTE)) == 0) {
-            return node;
-        } else {
-            for (uint i = 0; i < node->v.element.children.length; ++i) {
-                GumboNode* n = findId(id, static_cast<GumboNode*>(node->v.element.children.data[i]));
-                if (n)
-                    return n;
-            }
-        }
-    }
-    return nullptr;
 }
 
 QGumboNode::operator bool() const {

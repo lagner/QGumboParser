@@ -31,7 +31,6 @@ public:
 
     QGumboNodes getElementById(const QString&) const;
     QGumboNodes getElementsByTagName(HtmlTag) const;
-
     QGumboNodes getElementsByClassName(const QString&) const;
 
     bool isElement() const;

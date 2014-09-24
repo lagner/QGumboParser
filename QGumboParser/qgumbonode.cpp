@@ -11,7 +11,8 @@ const char* const ID_ATTRIBUTE 		= u8"id";
 const char* const CLASS_ATTRIBUTE 	= u8"class";
 
 template<typename TFunctor>
-bool iterateTree(GumboNode* node, TFunctor& functor) {
+bool iterateTree(GumboNode* node, TFunctor& functor)
+{
     if (!node || node->type != GUMBO_NODE_ELEMENT)
         return false;
 
@@ -64,6 +65,7 @@ QGumboNodes QGumboNode::getElementById(const QString& nodeId) const
 
     return nodes;
 }
+
 QGumboNodes QGumboNode::getElementsByTagName(HtmlTag tag) const
 {
     Q_ASSERT(ptr_);
@@ -153,7 +155,8 @@ QString QGumboNode::tagName() const
     return QString::fromUtf8(gumbo_normalized_tagname(tag));
 }
 
-QString QGumboNode::nodeName() const {
+QString QGumboNode::nodeName() const
+{
     return tagName();
 }
 
@@ -232,6 +235,7 @@ void QGumboNode::forEach(std::function<void(const QGumboNode&)> func) const
     iterateTree(ptr_, functor);
 }
 
-QGumboNode::operator bool() const {
+QGumboNode::operator bool() const
+{
     return ptr_;
 }

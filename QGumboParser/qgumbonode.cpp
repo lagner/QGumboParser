@@ -138,6 +138,14 @@ QString QGumboNode::innerText() const
 #endif
 }
 
+HtmlTag QGumboNode::tag() const
+{
+    if (isElement())
+        return HtmlTag(ptr_->v.element.tag);
+
+    return HtmlTag::UNKNOWN;
+}
+
 QString QGumboNode::tagName() const
 {
     Q_ASSERT(ptr_);
@@ -145,9 +153,13 @@ QString QGumboNode::tagName() const
     return QString::fromUtf8(gumbo_normalized_tagname(tag));
 }
 
+QString QGumboNode::nodeName() const {
+    return tagName();
+}
+
 QString QGumboNode::id() const
 {
-    GumboAttribute* attr = gumbo_get_attribute(&ptr_->v.element.attributes, u8"id");
+    GumboAttribute* attr = gumbo_get_attribute(&ptr_->v.element.attributes, ID_ATTRIBUTE);
     if (attr)
         return QString::fromUtf8(attr->value);
 
@@ -156,7 +168,7 @@ QString QGumboNode::id() const
 
 QStringList QGumboNode::classList() const
 {
-    GumboAttribute* attr = gumbo_get_attribute(&ptr_->v.element.attributes, u8"class");
+    GumboAttribute* attr = gumbo_get_attribute(&ptr_->v.element.attributes, CLASS_ATTRIBUTE);
     if (attr) {
         QString values = QString::fromUtf8(attr->value);
         return values.split(u8" ", QString::SkipEmptyParts, Qt::CaseInsensitive);

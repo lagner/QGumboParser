@@ -22,7 +22,10 @@ public:
     QGumboNode(QGumboNode&&) noexcept = default;
     QGumboNode& operator=(const QGumboNode&) = default;
 
+    HtmlTag tag() const;
     QString tagName() const;
+    QString nodeName() const;
+
     QString id() const;
     QStringList classList() const;
 

@@ -4,15 +4,20 @@
 
 namespace {
 const QString validHtml = R"~(
-        <!DOCTYPE html><html><head></head>
+        <!DOCTYPE html><html>
+        <head>
+            <title>test html text</title>
+            <meta charset="UTF-8">
+        </head>
         <body><div id="wrapper">
-        <header>
-        <div class="header_container"><p id="target">Some text for testing</p></div>
-        </header>
-        <article class="left article">
-        <div class="content"><a href="http://example.com">link</a></div>
-        </article>
-        <footer></footer>
+                <header>
+                    <div class="header_container"><p id="target">Some text for testing</p></div>
+                    <div class="left date">date</div>
+                </header>
+                <article class="left article"><h2>Head</h2>
+                    <div class="content"><a href="http://example.com" id="imp">link</a></div>
+                </article>
+                <footer></footer>
         </div></body></html>
         )~";
 }
@@ -21,7 +26,8 @@ tst_qgumboparsertest::tst_qgumboparsertest()
 {
 }
 
-void tst_qgumboparsertest::initTestCase() {
+void tst_qgumboparsertest::initTestCase()
+{
     try {
         validDocument.reset(new QGumboDocument(QGumboDocument::parse(validHtml)));
     } catch (...) {
@@ -31,7 +37,8 @@ void tst_qgumboparsertest::initTestCase() {
     QVERIFY2(validDocument, "QGumboDocument can't handle valid html");
 }
 
-void tst_qgumboparsertest::cleanupTestCase() {
+void tst_qgumboparsertest::cleanupTestCase()
+{
     validDocument.reset();
 }
 
@@ -63,7 +70,8 @@ void tst_qgumboparsertest::getById()
     }
 }
 
-void tst_qgumboparsertest::getByTagName() {
+void tst_qgumboparsertest::getByTagName()
+{
     try {
         QVERIFY(validDocument);
 
@@ -74,7 +82,7 @@ void tst_qgumboparsertest::getByTagName() {
         QCOMPARE(nodes.size(), size_t(1));
 
         nodes = root.getElementsByTagName(HtmlTag::DIV);
-        QCOMPARE(nodes.size(), size_t(3));
+        QCOMPARE(nodes.size(), size_t(4));
 
         nodes = root.getElementsByTagName(HtmlTag::A);
         QCOMPARE(nodes.size(), size_t(1));
@@ -86,7 +94,8 @@ void tst_qgumboparsertest::getByTagName() {
     }
 }
 
-void tst_qgumboparsertest::getAttributes() {
+void tst_qgumboparsertest::getAttributes()
+{
     try {
         QVERIFY(validDocument);
 
@@ -101,11 +110,12 @@ void tst_qgumboparsertest::getAttributes() {
             QVERIFY(!!node);
 
             QGumboAttributes attrs = node.allAttributes();
-            QCOMPARE(attrs.size(), size_t(1));
+            QCOMPARE(attrs.size(), size_t(2));
 
-            QGumboAttribute& attr = attrs.front();
-            QCOMPARE(attr.name(), QStringLiteral("href"));
-            QCOMPARE(attr.value(), QStringLiteral("http://example.com"));
+            QCOMPARE(attrs.front().name(), QStringLiteral("href"));
+            QCOMPARE(attrs.front().value(), QStringLiteral("http://example.com"));
+            QCOMPARE(attrs.back().name(), QStringLiteral("id"));
+            QCOMPARE(attrs.back().value(), QStringLiteral("imp"));
         }
         {
             QGumboNodes nodes = root.getElementsByTagName(HtmlTag::P);
@@ -122,6 +132,74 @@ void tst_qgumboparsertest::getAttributes() {
             QCOMPARE(attr.name(), QStringLiteral("id"));
             QCOMPARE(attr.value(), QStringLiteral("target"));
         }
+
+    } catch (const std::exception& ex) {
+        QString mes("exception was thrown: ");
+        mes.append(ex.what());
+        QVERIFY2(false, mes.toUtf8().constData());
+    }
+}
+
+void tst_qgumboparsertest::getByClassName()
+{
+    try {
+        QGumboNode root = validDocument->rootNode();
+        QVERIFY(!!root);
+
+        {
+            QGumboNodes nodes = root.getElementsByClassName(QStringLiteral("article"));
+            QCOMPARE(nodes.size(), size_t(1));
+        }
+        {
+            QGumboNodes nodes = root.getElementsByClassName(QStringLiteral("left"));
+            QCOMPARE(nodes.size(), size_t(2));
+
+            QCOMPARE(nodes.back().tag(), HtmlTag::ARTICLE);
+            QCOMPARE(nodes.front().tagName(), QStringLiteral("div"));
+        }
+    } catch (const std::exception& ex) {
+        QString mes("exception was thrown: ");
+        mes.append(ex.what());
+        QVERIFY2(false, mes.toUtf8().constData());
+    }
+}
+
+void tst_qgumboparsertest::id()
+{
+    try {
+        QGumboNode root = validDocument->rootNode();
+        QVERIFY(!!root);
+
+        QCOMPARE(root.id(), QStringLiteral(""));
+
+        QGumboNodes nodes = root.getElementsByTagName(HtmlTag::A);
+        QCOMPARE(nodes.size(), size_t(1));
+
+        QGumboNode& node = nodes.front();
+        QVERIFY(!!node);
+
+        QCOMPARE(node.id(), QStringLiteral("imp"));
+
+    } catch (const std::exception& ex) {
+        QString mes("exception was thrown: ");
+        mes.append(ex.what());
+        QVERIFY2(false, mes.toUtf8().constData());
+    }
+}
+
+void tst_qgumboparsertest::classes()
+{
+    try {
+        QGumboNode root = validDocument->rootNode();
+        QVERIFY(!!root);
+
+        QGumboNodes nodes = root.getElementsByTagName(HtmlTag::ARTICLE);
+        QCOMPARE(nodes.size(), size_t(1));
+
+        QStringList classes = nodes.front().classList();
+        QCOMPARE(classes.size(), 2);
+        QCOMPARE(classes.front(), QStringLiteral("left"));
+        QCOMPARE(classes.back(), QStringLiteral("article"));
 
     } catch (const std::exception& ex) {
         QString mes("exception was thrown: ");

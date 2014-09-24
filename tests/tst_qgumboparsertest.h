@@ -21,6 +21,9 @@ private Q_SLOTS:
     void getById();
     void getByTagName();
     void getAttributes();
+    void getByClassName();
+    void id();
+    void classes();
 
 private:
     QScopedPointer<QGumboDocument> validDocument;

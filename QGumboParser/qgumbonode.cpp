@@ -27,6 +27,23 @@ bool iterateTree(GumboNode* node, TFunctor& functor)
     return false;
 }
 
+template<typename TFunctor>
+bool iterateChildren(GumboNode* node, TFunctor& functor)
+{
+    if (node->type != GUMBO_NODE_ELEMENT)
+        return false;
+
+    GumboVector& vec = node->v.element.children;
+
+    for (uint i = 0, e = vec.length; i < e; ++i) {
+        GumboNode* node = static_cast<GumboNode*>(vec.data[i]);
+        if (functor(node))
+            return true;
+    }
+
+    return false;
+}
+
 } /* namespace */
 
 QGumboNode::QGumboNode()
@@ -108,6 +125,57 @@ QGumboNodes QGumboNode::getElementsByClassName(const QString& name) const
     iterateTree(ptr_, functor);
 
     return nodes;
+}
+
+QGumboNodes QGumboNode::childNodes() const
+{
+    Q_ASSERT(ptr_);
+
+    QGumboNodes nodes;
+
+    auto functor = [&nodes] (GumboNode* node) {
+        nodes.emplace_back(QGumboNode(node));
+        return false;
+    };
+
+    iterateChildren(ptr_, functor);
+
+    return nodes;
+}
+
+QGumboNodes QGumboNode::children() const
+{
+    Q_ASSERT(ptr_);
+
+    QGumboNodes nodes;
+
+    auto functor = [&nodes] (GumboNode* node) {
+        if (node->type == GUMBO_NODE_ELEMENT) {
+            nodes.emplace_back(QGumboNode(node));
+        }
+        return false;
+    };
+
+    iterateChildren(ptr_, functor);
+
+    return nodes;
+}
+
+int QGumboNode::childElementCount() const
+{
+    Q_ASSERT(ptr_);
+
+    int count = 0;
+
+    auto functor = [&count] (GumboNode* node) {
+        if (node->type == GUMBO_NODE_ELEMENT)
+            ++count;
+        return false;
+    };
+
+    iterateChildren(ptr_, functor);
+
+    return count;
 }
 
 QString QGumboNode::innerText() const

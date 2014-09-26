@@ -164,6 +164,51 @@ void tst_qgumboparsertest::getByClassName()
     }
 }
 
+void tst_qgumboparsertest::childNodes()
+{
+    try {
+        QGumboNode root = validDocument->rootNode();
+        QVERIFY(!!root);
+
+        QGumboNodes nodes = root.getElementById(QStringLiteral("wrapper"));
+        QCOMPARE(nodes.size(), size_t(1));
+
+        QGumboNodes childs = nodes.front().childNodes();
+        QCOMPARE(childs.size(), size_t(7));
+
+        QCOMPARE(nodes.front().childElementCount(), 3);
+
+        QGumboNodes children = nodes.front().children();
+        QCOMPARE(children.size(), size_t(3));
+
+        HtmlTag tag;
+
+        auto finder = [&tag] (const QGumboNode& node) {
+            return node.tag() == tag;
+        };
+
+        tag = HtmlTag::FOOTER;
+
+        auto it = std::find_if(children.begin(), children.end(), finder);
+        QVERIFY(it != children.end());
+
+        tag = HtmlTag::ARTICLE;
+
+        it = std::find_if(children.begin(), children.end(), finder);
+        QVERIFY(it != children.end());
+
+        tag = HtmlTag::HEADER;
+
+        it = std::find_if(children.begin(), children.end(), finder);
+        QVERIFY(it != children.end());
+
+    } catch (const std::exception& ex) {
+        QString mes("exception was thrown: ");
+        mes.append(ex.what());
+        QVERIFY2(false, mes.toUtf8().constData());
+    }
+}
+
 void tst_qgumboparsertest::id()
 {
     try {

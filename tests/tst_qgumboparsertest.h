@@ -22,6 +22,7 @@ private Q_SLOTS:
     void getByTagName();
     void getAttributes();
     void getByClassName();
+    void childNodes();
     void id();
     void classes();
 

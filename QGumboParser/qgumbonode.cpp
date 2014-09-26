@@ -182,30 +182,18 @@ QString QGumboNode::innerText() const
 {
     Q_ASSERT(ptr_);
 
-#ifdef QT_NO_DEBUG
-    for (uint i = 0; i < ptr_->v.element.children.length; ++i) {
-        GumboNode* node =
-                static_cast<GumboNode*>(ptr_->v.element.children.data[i]);
-        Q_ASSERT(node);
-        if (node->type == GUMBO_NODE_TEXT) {
-            return QString::fromUtf8(node->v.text.text);
-        }
-    }
-#else
-    QString data;
-    for (uint i = 0; i < ptr_->v.element.children.length; ++i) {
-        GumboNode* node =
-                static_cast<GumboNode*>(ptr_->v.element.children.data[i]);
-        Q_ASSERT(node);
+    QString text;
 
+    auto functor = [&text] (GumboNode* node) {
         if (node->type == GUMBO_NODE_TEXT) {
-
-            Q_ASSERT(data.isEmpty());
-            data += QString::fromUtf8(node->v.text.text);
+            text += QString::fromUtf8(node->v.text.text);
         }
-    }
-    return data;
-#endif
+        return false;
+    };
+
+    iterateChildren(ptr_, functor);
+
+    return text;
 }
 
 HtmlTag QGumboNode::tag() const

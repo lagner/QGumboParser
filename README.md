@@ -34,7 +34,7 @@ const char* HTML_PAGE = R"~("
     <h3>First header</h3>
     <p>text text text</p>
     <div class="content">
-        <h3>Nested header</h3>
+        <h3>Nested header <a href="">with link</a></h3>
     </div>
   </body>
 </html>
@@ -54,6 +54,15 @@ int main()
     for (const auto& node: nodes) {
         qDebug() << "h3: " << node.innerText();
     }
+
+    auto container = root.getElementsByClassName("content");
+    Q_ASSERT(container.size() == 1);
+
+    auto children = container.front().children();
+    for (const auto& node: children) {
+        qDebug() << "Tag: " << node.tagName();
+    }
+
     return 0;
 }
 

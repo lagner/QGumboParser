@@ -15,7 +15,7 @@ To add the library use the following steps:
 The library is ready to use.  
 Please pay attention the library requires c++11 support(just add *"CONFIG += c++11"* into your .pro file).
 ## Example
-```
+```cpp
 #include <QCoreApplication>
 #include <QDebug>
 #include <qgumbodocument.h>

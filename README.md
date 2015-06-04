@@ -1,8 +1,8 @@
 ## Introduction
-If you need to parse HTML page in Qt application it can be a problem. Qt doesn't have a HTML parser. You can use [gumbo-parser]("https://github.com/google/gumbo-parser") developed by google but it was written in pure C and doesn't provide Qt-like interface. Therefore not so comfortable to work with. This small library solves the issue. 
+If you need to parse HTML page in Qt application it can be a problem. Qt doesn't have a HTML parser. You can use [gumbo-parser]("https://github.com/google/gumbo-parser") developed by google but it was written in pure C and doesn't provide Qt-like interface. Therefore it is not so comfortable to work with. This small library solves the issue. 
 
 ## Quick Start
-The easist way to use QGumboParser is add it to your project as git submodule.  
+The easiest way to use QGumboParser is add it to your project as git submodule.  
 To add the library use the following steps:
 - Create Subdirs Project.
 - Add application subproject. "Qt Console Application" for example
@@ -13,7 +13,7 @@ To add the library use the following steps:
 - Right click to application project that need Html parser and hit Add library -> Internal library -> select QGumboParser in combobox. Click finish.
 
 The library is ready to use.  
-Please pay attention the library requires c++11 support(just add *"CONFIG += c++11"* into your .pro file).
+Please pay attention to the library requires c++11 support(just add *"CONFIG += c++11"* into your .pro file).
 ## Example
 ```cpp
 #include <QCoreApplication>

@@ -1,4 +1,6 @@
 #include "qgumboattribute.h"
+#include <stdexcept>
+
 
 QGumboAttribute::QGumboAttribute(const char* n, const char* value) {
     if (!n)

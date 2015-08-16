@@ -48,10 +48,12 @@ public:
     void forEach(std::function<void(const QGumboNode&)>) const;
 
     explicit operator bool() const;
+    
+    QGumboNode(GumboNode* node);
 
 private:
     QGumboNode();
-    QGumboNode(GumboNode* node);
+
 
     friend class QGumboDocument;
 private:

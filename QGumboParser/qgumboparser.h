@@ -1,7 +1,7 @@
 #ifndef QGUMBOPARSER_H
 #define QGUMBOPARSER_H
 
-#include "gumbo/gumbo.h"
+#include "gumbo-parser/src/gumbo.h"
 
 struct GumboInternalOutput;
 class QByteArray;

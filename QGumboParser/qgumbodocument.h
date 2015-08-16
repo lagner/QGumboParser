@@ -17,7 +17,7 @@ public:
 public:
     ~QGumboDocument();
     QGumboDocument(QGumboDocument&&);
-
+    QGumboDocument();
     QGumboNode rootNode() const;
 
 private:

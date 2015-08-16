@@ -3,7 +3,6 @@
 #include "qgumboparser.h"
 #include "qgumbodocument.h"
 #include "qgumbonode.h"
-#include "gumbo/gumbo.h"
 
 
 QGumboParser::QGumboParser(const char* rawUtf8String) {

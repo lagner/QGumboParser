@@ -37,7 +37,7 @@ QGumboDocument::QGumboDocument(){
     options_=&kGumboDefaultOptions;
     gumboOutput_=gumbo_parse("");
 }
-s
+
 
 QGumboDocument::~QGumboDocument()
 {

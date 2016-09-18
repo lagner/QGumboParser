@@ -154,6 +154,7 @@ enum class HtmlTag
   NOBR,
   SPACER,
   TT,
+  RTC,
   UNKNOWN,
   LAST,
 };

@@ -1,4 +1,5 @@
 #include <cstring>
+#include <sstream>
 #include <QString>
 #include <QDebug>
 #include <QStringList>
@@ -64,13 +65,13 @@ QGumboNodes QGumboNode::getElementById(const QString& nodeId) const
     if (nodeId.isEmpty())
         throw std::invalid_argument("id can't be empty string");
 
-    const QByteArray idName = nodeId.toUtf8();
     QGumboNodes nodes;
 
-    auto functor = [&nodes, &idName] (GumboNode* node) {
+    auto functor = [&nodes, &nodeId] (GumboNode* node) {
         GumboAttribute* attr = gumbo_get_attribute(&node->v.element.attributes, ID_ATTRIBUTE);
         if (attr) {
-            if (strcmp(attr->value, idName.constData()) == 0) {
+            const QString value = QString::fromUtf8(attr->value);
+            if (value.compare(nodeId, Qt::CaseInsensitive) == 0) {
                 nodes.emplace_back(QGumboNode(node));
                 return true;
             }
@@ -109,14 +110,20 @@ QGumboNodes QGumboNode::getElementsByClassName(const QString& name) const
     if (name.isEmpty())
         throw std::invalid_argument("class name can't be empty string");
 
-    const QByteArray className = name.toUtf8();
     QGumboNodes nodes;
 
-    auto functor = [&nodes, &className] (GumboNode* node) {
+    auto functor = [&nodes, &name] (GumboNode* node) {
         GumboAttribute* attr = gumbo_get_attribute(&node->v.element.attributes, CLASS_ATTRIBUTE);
         if (attr) {
-            if (strstr(attr->value, className.constData()) != nullptr) {
-                nodes.emplace_back(QGumboNode(node));
+            const QString value = QString::fromUtf8(attr->value);
+            const QVector<QStringRef> parts =
+                    value.splitRef(QChar(' '), QString::SkipEmptyParts, Qt::CaseInsensitive);
+
+            for (const QStringRef& part: parts) {
+                if (part.compare(name, Qt::CaseInsensitive) == 0) {
+                    nodes.emplace_back(QGumboNode(node));
+                    break;
+                }
             }
         }
         return false;

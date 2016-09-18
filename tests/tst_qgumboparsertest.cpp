@@ -9,10 +9,10 @@ const QString validHtml = R"~(
             <title>test html text</title>
             <meta charset="UTF-8">
         </head>
-        <body><div id="wrapper">
+        <body><div id="wraPPer">
                 <header>
                     <div class="header_container"><p id="target">Some text for testing</p></div>
-                    <div class="left date">date</div>
+                    <div class="Left date">date</div>
                 </header>
                 <article class="left article"><h2>Head</h2>
                     <div class="content"><a href="http://example.com" id="imp">link</a></div>
@@ -54,7 +54,7 @@ void tst_qgumboparsertest::getById()
         QGumboNode root = validDocument->rootNode();
         QVERIFY(!!root);
 
-        QGumboNodes nodes = root.getElementById(QStringLiteral("target"));
+        QGumboNodes nodes = root.getElementById(QStringLiteral("taRGet"));
         QVERIFY(nodes.size() == 1);
 
         QGumboNode& node = nodes.front();

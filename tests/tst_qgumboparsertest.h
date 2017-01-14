@@ -25,7 +25,7 @@ private Q_SLOTS:
     void childNodes();
     void id();
     void classes();
-    void outerTextTest();
+    void outerHtmlTest();
 
 private:
     QScopedPointer<QGumboDocument> validDocument;

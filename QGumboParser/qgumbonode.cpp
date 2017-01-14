@@ -203,7 +203,7 @@ QString QGumboNode::innerText() const
     return text;
 }
 
-QString QGumboNode::outerText() const
+QString QGumboNode::outerHtml() const
 {
     Q_ASSERT(ptr_);
 

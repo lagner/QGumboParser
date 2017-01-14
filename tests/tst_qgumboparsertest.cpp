@@ -264,7 +264,7 @@ void tst_qgumboparsertest::classes()
     }
 }
 
-void tst_qgumboparsertest::outerTextTest()
+void tst_qgumboparsertest::outerHtmlTest()
 {
     QVERIFY(validDocument);
 
@@ -275,7 +275,7 @@ void tst_qgumboparsertest::outerTextTest()
     QCOMPARE(nodes.size(), size_t(1));
     QGumboNode& node = nodes.front();
 
-    QCOMPARE(node.outerText(),
+    QCOMPARE(node.outerHtml(),
              QStringLiteral(R"~(<p id="target">Some text for testing</p>)~"));
 
     QGumboNodes items = root.getElementsByTagName(HtmlTag::HEAD);
@@ -286,7 +286,7 @@ void tst_qgumboparsertest::outerTextTest()
             <title>test html text</title>
             <meta charset="UTF-8">
         </head>)~");
-    QCOMPARE(head.outerText(), ref);
+    QCOMPARE(head.outerHtml(), ref);
 }
 
 QTEST_MAIN(tst_qgumboparsertest)

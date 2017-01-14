@@ -41,7 +41,7 @@ public:
     bool hasAttribute(const QString&) const;
 
     QString innerText() const;
-    QString outerText() const;
+    QString outerHtml() const;
     QString getAttribute(const QString&) const;
 
     QGumboAttributes allAttributes() const;

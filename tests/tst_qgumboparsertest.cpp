@@ -42,8 +42,19 @@ void tst_qgumboparsertest::cleanupTestCase()
     validDocument.reset();
 }
 
-void tst_qgumboparsertest::parse()
+void tst_qgumboparsertest::interfaceTest()
 {
+    QVERIFY(validDocument);
+
+    QGumboNode root = validDocument->rootNode();
+    QVERIFY(!!root);
+
+    // assinment
+    QGumboNode other = root;
+    Q_UNUSED(other);
+
+    QGumboNode copied(root);
+    QGumboNode moved(std::move(root));
 }
 
 void tst_qgumboparsertest::getById()
@@ -251,6 +262,31 @@ void tst_qgumboparsertest::classes()
         mes.append(ex.what());
         QVERIFY2(false, mes.toUtf8().constData());
     }
+}
+
+void tst_qgumboparsertest::outerTextTest()
+{
+    QVERIFY(validDocument);
+
+    QGumboNode root = validDocument->rootNode();
+    QVERIFY(!!root);
+
+    QGumboNodes nodes = root.getElementById(QStringLiteral("taRGet"));
+    QCOMPARE(nodes.size(), size_t(1));
+    QGumboNode& node = nodes.front();
+
+    QCOMPARE(node.outerText(),
+             QStringLiteral(R"~(<p id="target">Some text for testing</p>)~"));
+
+    QGumboNodes items = root.getElementsByTagName(HtmlTag::HEAD);
+    QCOMPARE(items.size(), size_t(1));
+    QGumboNode head = items.front();
+
+    const auto& ref = QStringLiteral(R"~(<head>
+            <title>test html text</title>
+            <meta charset="UTF-8">
+        </head>)~");
+    QCOMPARE(head.outerText(), ref);
 }
 
 QTEST_MAIN(tst_qgumboparsertest)

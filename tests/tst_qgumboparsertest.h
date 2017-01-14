@@ -17,7 +17,7 @@ private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 
-    void parse();
+    void interfaceTest();
     void getById();
     void getByTagName();
     void getAttributes();
@@ -25,6 +25,7 @@ private Q_SLOTS:
     void childNodes();
     void id();
     void classes();
+    void outerTextTest();
 
 private:
     QScopedPointer<QGumboDocument> validDocument;

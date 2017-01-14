@@ -203,6 +203,32 @@ QString QGumboNode::innerText() const
     return text;
 }
 
+QString QGumboNode::outerText() const
+{
+    Q_ASSERT(ptr_);
+
+    QString text;
+    switch (ptr_->type) {
+    case GUMBO_NODE_DOCUMENT: {
+        throw std::runtime_error("invalid node type");
+    }
+    case GUMBO_NODE_ELEMENT: {
+        const auto& elem = ptr_->v.element;
+        const auto& tag = elem.original_tag;
+        if (tag.data && tag.length) {
+            int lenght = elem.end_pos.offset - elem.start_pos.offset + elem.original_end_tag.length;
+            Q_ASSERT(lenght > 0);
+            text = QString::fromUtf8(tag.data, lenght);
+        }
+        break;
+    }
+    default: {
+        const auto& str = ptr_->v.text.original_text;
+        text = QString::fromUtf8(str.data, str.length);
+    }}
+    return text;
+}
+
 HtmlTag QGumboNode::tag() const
 {
     if (isElement())

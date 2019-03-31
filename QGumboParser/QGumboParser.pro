@@ -51,6 +51,10 @@ contains(QMAKE_CC, gcc): {
     QMAKE_CFLAGS_WARN_ON += -Wno-unused-parameter -Wno-sign-compare -Wno-old-style-declaration
 }
 
+win32-msvc*: {
+    INCLUDEPATH += gumbo-parser/visualc/include
+}
+
 unix {
     target.path = /usr/lib
     INSTALLS += target

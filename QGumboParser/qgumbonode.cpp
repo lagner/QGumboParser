@@ -116,8 +116,14 @@ QGumboNodes QGumboNode::getElementsByClassName(const QString& name) const
         GumboAttribute* attr = gumbo_get_attribute(&node->v.element.attributes, CLASS_ATTRIBUTE);
         if (attr) {
             const QString value = QString::fromUtf8(attr->value);
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
             const QVector<QStringRef> parts =
                     value.splitRef(QChar(' '), QString::SkipEmptyParts, Qt::CaseInsensitive);
+#else
+            const QVector<QStringRef> parts =
+                    value.splitRef(QChar(' '), Qt::SkipEmptyParts, Qt::CaseInsensitive);
+#endif
 
             for (const QStringRef& part: parts) {
                 if (part.compare(name, Qt::CaseInsensitive) == 0) {
@@ -263,7 +269,12 @@ QStringList QGumboNode::classList() const
     GumboAttribute* attr = gumbo_get_attribute(&ptr_->v.element.attributes, CLASS_ATTRIBUTE);
     if (attr) {
         QString values = QString::fromUtf8(attr->value);
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
         return values.split(u8" ", QString::SkipEmptyParts, Qt::CaseInsensitive);
+#else
+        return values.split(u8" ", Qt::SkipEmptyParts, Qt::CaseInsensitive);
+#endif
     }
 
     return QStringList();

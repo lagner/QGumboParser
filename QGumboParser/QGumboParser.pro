@@ -47,8 +47,13 @@ HEADERS += \
     gumbo-parser/src/vector.h \
     HtmlTag.h
 
-contains(QMAKE_CC, gcc): {
+# NOTE: contains() is broken, so use equals() as workaround
+TEMP_CC = $$basename(QMAKE_CC)
+equals(TEMP_CC, "gcc"): {
     QMAKE_CFLAGS_WARN_ON += -Wno-unused-parameter -Wno-sign-compare -Wno-old-style-declaration
+}
+equals(TEMP_CC, "clang"): {
+    QMAKE_CFLAGS_WARN_ON += -Wno-unused-parameter -Wno-sign-compare
 }
 
 win32-msvc*: {

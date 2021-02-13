@@ -1,6 +1,7 @@
 #ifndef QGUMBONODE_H
 #define QGUMBONODE_H
 
+#include <QtCore/QtGlobal>
 #include <vector>
 #include <functional>
 #include "gumbo-parser/src/gumbo.h"
@@ -10,7 +11,9 @@ class QString;
 class QGumboNode;
 class QGumboAttribute;
 class QGumboDocument;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 class QStringList;
+#endif
 
 typedef std::vector<QGumboNode> 		QGumboNodes;
 typedef std::vector<QGumboAttribute> 	QGumboAttributes;

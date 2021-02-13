@@ -120,17 +120,32 @@ QGumboNodes QGumboNode::getElementsByClassName(const QString& name) const
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
             const QVector<QStringRef> parts =
                     value.splitRef(QChar(' '), QString::SkipEmptyParts, Qt::CaseInsensitive);
-#else
-            const QVector<QStringRef> parts =
-                    value.splitRef(QChar(' '), Qt::SkipEmptyParts, Qt::CaseInsensitive);
-#endif
-
             for (const QStringRef& part: parts) {
                 if (part.compare(name, Qt::CaseInsensitive) == 0) {
                     nodes.emplace_back(QGumboNode(node));
                     break;
                 }
             }
+#elif QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+            const QVector<QStringRef> parts =
+                    value.splitRef(QChar(' '), Qt::SkipEmptyParts, Qt::CaseInsensitive);
+            for (const QStringRef& part: parts) {
+                if (part.compare(name, Qt::CaseInsensitive) == 0) {
+                    nodes.emplace_back(QGumboNode(node));
+                    break;
+                }
+            }
+#else
+            // Qt6 use QStringView instead of QStringRef
+            // More info about this on https://doc-snapshots.qt.io/qt6-dev/qtcore-changes-qt6.html#qstringref
+            const QList<QStringView> parts = QStringView { value }.split(u8' ');
+            for (const QStringView &part : parts) {
+                if (part.compare(name, Qt::CaseInsensitive) == 0) {
+                    nodes.emplace_back(QGumboNode(node));
+                    break;
+                }
+            }
+#endif
         }
         return false;
     };

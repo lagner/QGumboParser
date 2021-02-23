@@ -47,6 +47,7 @@ public:
     QGumboAttributes allAttributes() const;
 
     void forEach(std::function<void(const QGumboNode&)>) const;
+    void forEachChild(std::function<void(const QGumboNode&)>) const;
 
     explicit operator bool() const;
 

@@ -13,6 +13,7 @@ public:
     static QGumboDocument parse(const QString& htmlText);
     static QGumboDocument parse(const char* utf8data);
     static QGumboDocument parse(QByteArray utf8data);
+    static QGumboDocument parse(QByteArray utf8data, const GumboOptions& opt);
 
 public:
     ~QGumboDocument();
@@ -21,7 +22,7 @@ public:
     QGumboNode rootNode() const;
 
 private:
-    QGumboDocument(QByteArray);
+    QGumboDocument(QByteArray, const GumboOptions& opt=kGumboDefaultOptions);
 
     QGumboDocument(const QGumboDocument&) = delete;
     QGumboDocument& operator=(const QGumboDocument&) = delete;

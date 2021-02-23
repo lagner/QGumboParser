@@ -22,8 +22,13 @@ QGumboDocument QGumboDocument::parse(QByteArray data)
     return QGumboDocument(data);
 }
 
-QGumboDocument::QGumboDocument(QByteArray arr) :
-    options_(&kGumboDefaultOptions),
+QGumboDocument QGumboDocument::parse(QByteArray data, const GumboOptions& opt)
+{
+    return QGumboDocument(data, opt);
+}
+
+QGumboDocument::QGumboDocument(QByteArray arr, const GumboOptions& opt) :
+    options_(&opt),
     sourceData_(arr)
 {
     gumboOutput_ = gumbo_parse_with_options(options_,

@@ -124,7 +124,6 @@ QGumboNodes QGumboNode::getElementsByClassName(const QString& name) const
             const QVector<QStringRef> parts =
                     value.splitRef(QChar(' '), Qt::SkipEmptyParts, Qt::CaseInsensitive);
 #endif
-
             for (const QStringRef& part: parts) {
                 if (part.compare(name, Qt::CaseInsensitive) == 0) {
                     nodes.emplace_back(QGumboNode(node));
@@ -333,6 +332,18 @@ void QGumboNode::forEach(std::function<void(const QGumboNode&)> func) const
     };
 
     iterateTree(ptr_, functor);
+}
+
+void QGumboNode::forEachChild(std::function<void(const QGumboNode&)> func) const
+{
+    Q_ASSERT(ptr_);
+
+    auto functor = [&func](GumboNode* node) {
+        func(QGumboNode(node));
+        return false;
+    };
+
+    iterateChildren(ptr_, functor);
 }
 
 QGumboNode::operator bool() const
